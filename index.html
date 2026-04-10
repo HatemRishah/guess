@@ -1,165 +1,240 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sketchly — Draw & Guess</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-
-<!-- ═══════════════════════════════════════════════════════ LOBBY ═══ -->
-<div id="lobbyScreen" class="screen active">
-  <div class="lobby-bg">
-    <div class="blob blob1"></div>
-    <div class="blob blob2"></div>
-    <div class="blob blob3"></div>
-  </div>
-  <div class="lobby-card">
-    <div class="logo">
-      <span class="logo-icon">🎨</span>
-      <h1>Sketchly</h1>
-      <p class="tagline">Draw it. Guess it. Win it.</p>
-    </div>
-    <div class="lobby-form">
-      <input id="nicknameInput" type="text" placeholder="Your nickname..." maxlength="16" />
-      <div class="room-actions">
-        <button id="createRoomBtn" class="btn btn-primary">✦ Create Room</button>
-        <div class="divider"><span>or</span></div>
-        <div class="join-row">
-          <input id="roomCodeInput" type="text" placeholder="Room code..." maxlength="5" />
-          <button id="joinRoomBtn" class="btn btn-secondary">Join →</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sketchly — Draw & Guess</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ═══════════════════════════════════════════════════════ LOBBY ═══ -->
+    <div id="lobbyScreen" class="screen active">
+      <div class="lobby-bg">
+        <div class="blob blob1"></div>
+        <div class="blob blob2"></div>
+        <div class="blob blob3"></div>
+      </div>
+      <div class="lobby-card">
+        <div class="logo">
+          <span class="logo-icon">🎨</span>
+          <h1>Sketchly</h1>
+          <p class="tagline">Draw it. Guess it. Win it.</p>
+        </div>
+        <div class="lobby-form">
+          <input
+            id="nicknameInput"
+            type="text"
+            placeholder="Your nickname..."
+            maxlength="16"
+          />
+          <div class="room-actions">
+            <button id="createRoomBtn" class="btn btn-primary">
+              ✦ Create Room
+            </button>
+            <div class="divider"><span>or</span></div>
+            <div class="join-row">
+              <input
+                id="roomCodeInput"
+                type="text"
+                placeholder="Room code..."
+                maxlength="5"
+              />
+              <button id="joinRoomBtn" class="btn btn-secondary">Join →</button>
+            </div>
+          </div>
+          <p id="lobbyError" class="error-msg"></p>
         </div>
       </div>
-      <p id="lobbyError" class="error-msg"></p>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════ WAITING ROOM ═══ -->
-<div id="waitingScreen" class="screen">
-  <div class="waiting-header">
-    <div class="logo-small">🎨 Sketchly</div>
-    <div class="room-info">
-      Room: <span id="displayRoomCode" class="room-badge"></span>
-      <button id="copyCodeBtn" title="Copy code">📋</button>
-    </div>
-  </div>
-  <div class="waiting-content">
-    <h2>Waiting for players...</h2>
-    <div id="waitingPlayerList" class="waiting-players"></div>
-    <button id="startGameBtn" class="btn btn-primary btn-big" style="display:none">🚀 Start Game!</button>
-    <p id="waitingHint" class="hint-text">Share the room code with friends to play together!</p>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════ GAME ═══ -->
-<div id="gameScreen" class="screen">
-
-  <!-- Status Bar -->
-  <div class="status-bar">
-    <div class="status-left">
-      <span class="status-label">Round</span>
-      <span id="roundDisplay" class="status-value">1</span>
-    </div>
-    <div class="status-center">
-      <span id="drawerNameDisplay" class="drawer-name">...</span>
-      <span class="status-label"> is drawing</span>
-      <div id="wordHintDisplay" class="word-hint"></div>
-    </div>
-    <div class="status-right">
-      <div id="timerDisplay" class="timer">60</div>
-    </div>
-  </div>
-
-  <!-- Game Area -->
-  <div class="game-area">
-
-    <!-- LEFT: Scoreboard -->
-    <div class="side-panel left-panel">
-      <h3 class="panel-title">🏆 Scoreboard</h3>
-      <div id="scoreboard" class="scoreboard"></div>
     </div>
 
-    <!-- CENTER: Canvas -->
-    <div class="canvas-section">
-      <div class="canvas-wrapper">
-        <canvas id="gameCanvas" width="600" height="400"></canvas>
-        <div id="canvasOverlay" class="canvas-overlay">
-          <div class="overlay-content">
-            <div id="overlayIcon">🖌️</div>
-            <div id="overlayText">Waiting for drawer...</div>
+    <!-- ═══════════════════════════════════════════════════════ WAITING ROOM ═══ -->
+    <div id="waitingScreen" class="screen">
+      <div class="waiting-header">
+        <div class="logo-small">🎨 Sketchly</div>
+        <div class="room-info">
+          Room: <span id="displayRoomCode" class="room-badge"></span>
+          <button id="copyCodeBtn" title="Copy code">📋</button>
+        </div>
+      </div>
+      <div class="waiting-content">
+        <h2>Waiting for players...</h2>
+        <div id="waitingPlayerList" class="waiting-players"></div>
+        <button
+          id="startGameBtn"
+          class="btn btn-primary btn-big"
+          style="display: none"
+        >
+          🚀 Start Game!
+        </button>
+        <p id="waitingHint" class="hint-text">
+          Share the room code with friends to play together!
+        </p>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ GAME ═══ -->
+    <div id="gameScreen" class="screen">
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <div class="status-left">
+          <span class="status-label">Round</span>
+          <span id="roundDisplay" class="status-value">1</span>
+        </div>
+        <div class="status-center">
+          <span id="drawerNameDisplay" class="drawer-name">...</span>
+          <span class="status-label"> is drawing</span>
+          <div id="wordHintDisplay" class="word-hint"></div>
+        </div>
+        <div class="status-right">
+          <div id="timerDisplay" class="timer">60</div>
+        </div>
+      </div>
+
+      <!-- Game Area -->
+      <div class="game-area">
+        <!-- LEFT: Scoreboard -->
+        <div class="side-panel left-panel">
+          <h3 class="panel-title">🏆 Scoreboard</h3>
+          <div id="scoreboard" class="scoreboard"></div>
+        </div>
+
+        <!-- CENTER: Canvas -->
+        <div class="canvas-section">
+          <div class="canvas-wrapper">
+            <canvas id="gameCanvas" width="600" height="400"></canvas>
+            <div id="canvasOverlay" class="canvas-overlay">
+              <div class="overlay-content">
+                <div id="overlayIcon">🖌️</div>
+                <div id="overlayText">Waiting for drawer...</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Drawing Tools -->
+          <div id="drawingTools" class="drawing-tools" style="display: none">
+            <div class="tool-group">
+              <label>Color</label>
+              <div class="color-swatches">
+                <div
+                  class="swatch active"
+                  data-color="#1a1a2e"
+                  style="background: #1a1a2e"
+                ></div>
+                <div
+                  class="swatch"
+                  data-color="#e63946"
+                  style="background: #e63946"
+                ></div>
+                <div
+                  class="swatch"
+                  data-color="#f4a261"
+                  style="background: #f4a261"
+                ></div>
+                <div
+                  class="swatch"
+                  data-color="#2a9d8f"
+                  style="background: #2a9d8f"
+                ></div>
+                <div
+                  class="swatch"
+                  data-color="#457b9d"
+                  style="background: #457b9d"
+                ></div>
+                <div
+                  class="swatch"
+                  data-color="#a8dadc"
+                  style="background: #a8dadc"
+                ></div>
+                <div
+                  class="swatch"
+                  data-color="#f1faee"
+                  style="background: #f1faee"
+                ></div>
+                <div
+                  class="swatch"
+                  data-color="#e9c46a"
+                  style="background: #e9c46a"
+                ></div>
+                <div
+                  class="swatch"
+                  data-color="#6d6875"
+                  style="background: #6d6875"
+                ></div>
+                <div
+                  class="swatch"
+                  data-color="#b5838d"
+                  style="background: #b5838d"
+                ></div>
+                <input
+                  type="color"
+                  id="colorPicker"
+                  value="#1a1a2e"
+                  title="Custom color"
+                />
+              </div>
+            </div>
+            <div class="tool-group">
+              <label>Size <span id="brushSizeLabel">6</span>px</label>
+              <input type="range" id="brushSize" min="2" max="40" value="6" />
+            </div>
+            <div class="tool-group tool-buttons">
+              <button id="eraserBtn" class="tool-btn" title="Eraser">🧹</button>
+              <button id="undoBtn" class="tool-btn" title="Undo">↩️</button>
+              <button
+                id="clearBtn"
+                class="tool-btn danger"
+                title="Clear canvas"
+              >
+                🗑️
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Chat -->
+        <div class="side-panel right-panel">
+          <h3 class="panel-title">💬 Guesses</h3>
+          <div id="chatMessages" class="chat-messages"></div>
+          <div class="chat-input-area">
+            <input
+              id="chatInput"
+              type="text"
+              placeholder="Type your guess..."
+              maxlength="50"
+            />
+            <button id="sendGuessBtn" class="btn-send">→</button>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Drawing Tools -->
-      <div id="drawingTools" class="drawing-tools" style="display:none">
-        <div class="tool-group">
-          <label>Color</label>
-          <div class="color-swatches">
-            <div class="swatch active" data-color="#1a1a2e" style="background:#1a1a2e"></div>
-            <div class="swatch" data-color="#e63946" style="background:#e63946"></div>
-            <div class="swatch" data-color="#f4a261" style="background:#f4a261"></div>
-            <div class="swatch" data-color="#2a9d8f" style="background:#2a9d8f"></div>
-            <div class="swatch" data-color="#457b9d" style="background:#457b9d"></div>
-            <div class="swatch" data-color="#a8dadc" style="background:#a8dadc"></div>
-            <div class="swatch" data-color="#f1faee" style="background:#f1faee"></div>
-            <div class="swatch" data-color="#e9c46a" style="background:#e9c46a"></div>
-            <div class="swatch" data-color="#6d6875" style="background:#6d6875"></div>
-            <div class="swatch" data-color="#b5838d" style="background:#b5838d"></div>
-            <input type="color" id="colorPicker" value="#1a1a2e" title="Custom color" />
-          </div>
-        </div>
-        <div class="tool-group">
-          <label>Size <span id="brushSizeLabel">6</span>px</label>
-          <input type="range" id="brushSize" min="2" max="40" value="6" />
-        </div>
-        <div class="tool-group tool-buttons">
-          <button id="eraserBtn" class="tool-btn" title="Eraser">🧹</button>
-          <button id="undoBtn" class="tool-btn" title="Undo">↩️</button>
-          <button id="clearBtn" class="tool-btn danger" title="Clear canvas">🗑️</button>
-        </div>
+    <!-- ═══════════════════════════════════════════════════════ MODALS ═══ -->
+
+    <!-- Word Choice Modal -->
+    <div id="wordChoiceModal" class="modal-overlay">
+      <div class="modal-card">
+        <h2>🎯 Choose a word!</h2>
+        <p>Pick one word to draw for everyone</p>
+        <div id="wordChoices" class="word-choices"></div>
       </div>
     </div>
 
-    <!-- RIGHT: Chat -->
-    <div class="side-panel right-panel">
-      <h3 class="panel-title">💬 Guesses</h3>
-      <div id="chatMessages" class="chat-messages"></div>
-      <div class="chat-input-area">
-        <input id="chatInput" type="text" placeholder="Type your guess..." maxlength="50" />
-        <button id="sendGuessBtn" class="btn-send">→</button>
+    <!-- Round End Modal -->
+    <div id="roundEndModal" class="modal-overlay">
+      <div class="modal-card">
+        <h2>⏰ Round Over!</h2>
+        <p>The word was: <strong id="revealedWord"></strong></p>
+        <div id="roundScores" class="round-scores"></div>
+        <p class="next-round-hint">Next round starting soon...</p>
       </div>
     </div>
 
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════ MODALS ═══ -->
-
-<!-- Word Choice Modal -->
-<div id="wordChoiceModal" class="modal-overlay">
-  <div class="modal-card">
-    <h2>🎯 Choose a word!</h2>
-    <p>Pick one word to draw for everyone</p>
-    <div id="wordChoices" class="word-choices"></div>
-  </div>
-</div>
-
-<!-- Round End Modal -->
-<div id="roundEndModal" class="modal-overlay">
-  <div class="modal-card">
-    <h2>⏰ Round Over!</h2>
-    <p>The word was: <strong id="revealedWord"></strong></p>
-    <div id="roundScores" class="round-scores"></div>
-    <p class="next-round-hint">Next round starting soon...</p>
-  </div>
-</div>
-
-<script src="/socket.io/socket.io.js"></script>
-<script src="script.js"></script>
-</body>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="script.js"></script>
+  </body>
 </html>
